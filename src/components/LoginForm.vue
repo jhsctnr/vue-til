@@ -55,7 +55,8 @@ export default {
           username: this.username,
           password: this.password,
         };
-        await loginUser(userData);
+        const { data } = await loginUser(userData);
+        this.$store.commit('setUsername', data.user.username);
         this.$router.push('/main');
         // this.logMessage = `${data.user.username} 님 환영합니다`;
         // this.initForm();

@@ -4,17 +4,31 @@
       <RouterLink to="/" class="logo"> TIL </RouterLink>
     </div>
     <div class="navigations">
-      <RouterLink to="/login">로그인</RouterLink>
-      <RouterLink to="/signup">회원가입</RouterLink>
+      <template v-if="isUserLogin">
+        <span class="username">{{ $store.state.username }}</span>
+      </template>
+      <template v-else>
+        <RouterLink to="/login">로그인</RouterLink>
+        <RouterLink to="/signup">회원가입</RouterLink>
+      </template>
     </div>
   </header>
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isUserLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
+};
 </script>
 
 <style scoped>
+.username {
+  color: white;
+}
 header {
   display: flex;
   justify-content: space-between;
