@@ -11,13 +11,16 @@
         />
       </ul>
     </div>
+    <RouterLink to="/add" class="create-button">
+      <i class="ion-md-add" />
+    </RouterLink>
   </div>
 </template>
 
 <script>
 import PostListItem from '@/components/posts/PostListItem.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-import { fetchPosts } from '@/api/index';
+import { fetchPosts } from '@/api/posts';
 
 export default {
   data() {
@@ -28,10 +31,14 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.isLoading = true;
-      const { data } = await fetchPosts();
-      this.isLoading = false;
-      this.postItems = data.posts;
+      try {
+        this.isLoading = true;
+        const { data } = await fetchPosts();
+        this.isLoading = false;
+        this.postItems = data.posts;
+      } catch (error) {
+        console.log(error.response.data);
+      }
     },
   },
   created() {
