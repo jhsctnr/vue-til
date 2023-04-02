@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   routes: [
     {
@@ -13,6 +14,13 @@ export default new VueRouter({
     {
       path: '/login',
       component: () => import('@/views/LoginPage.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.getters.isLogin) {
+          next('/main');
+          return;
+        }
+        next();
+      },
     },
     {
       path: '/signup',
@@ -21,14 +29,17 @@ export default new VueRouter({
     {
       path: '/main',
       component: () => import('@/views/MainPage.vue'),
+      meta: { auth: true },
     },
     {
       path: '/add',
       component: () => import('@/views/PostAddPage.vue'),
+      meta: { auth: true },
     },
     {
       path: '/post/:id',
       component: () => import('@/views/PostEditPage.vue'),
+      meta: { auth: true },
     },
     {
       path: '*',
@@ -36,3 +47,13 @@ export default new VueRouter({
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !store.getters.isLogin) {
+    next('/login');
+    return;
+  }
+  next();
+});
+
+export default router;

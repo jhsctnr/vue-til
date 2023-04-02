@@ -38,7 +38,7 @@ export default {
         this.isLoading = false;
         this.postItems = data.posts;
       } catch (error) {
-        console.log(error.response.data);
+        console.log(error.response.data.message);
       }
     },
   },
